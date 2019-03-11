@@ -33,7 +33,7 @@ const getChooseOptionsCardContent = ({ meta, question }) => {
     card: {
       question: question.html,
       answers: getUniqAnswers(question.answers).map((el, index) => ({
-        text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
+        text: el,
         correct: !index,
       })),
       comment: meta.content,
@@ -53,7 +53,7 @@ const getChooseSequenceCardContent = ({ meta, question }) => {
     card: {
       question: question.html,
       answers: getUniqAnswers(question.answers).map(el => ({
-        text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
+        text: el,
       })),
       comment: meta.content,
     },
