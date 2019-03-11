@@ -1,11 +1,39 @@
 const ANSWER_PLACEHOLDER = '???';
 
 const getInfoCardContent = ({ meta, question }) => {
-  return 'Put Info Card content here';
+  return {
+    __meta__: {
+      author: meta.author,
+      source: meta.source,
+    },
+    type: 'info',
+    lang: 'en',
+    tags: ['enki', ...meta.tags],
+    card: {
+      question: question.html,
+      comment: meta.content,
+    },
+  };
 };
 
 const getChooseOptionsCardContent = ({ meta, question }) => {
-  return 'Put choose_options Card content here';
+  return {
+    __meta__: {
+      author: meta.author,
+      source: meta.source,
+    },
+    type: 'choose_options',
+    lang: 'en',
+    tags: ['enki', ...meta.tags],
+    card: {
+      question: question.html,
+      answers: question.answers.map((el, index) => ({
+        text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
+        correct: !index,
+      })),
+      comment: meta.content,
+    },
+  };
 };
 
 const getChooseSequenceCardContent = ({ meta, question }) => {
@@ -19,9 +47,10 @@ const getChooseSequenceCardContent = ({ meta, question }) => {
     tags: ['enki', ...meta.tags],
     card: {
       question: question.html,
-      answers: question.answers.map(el => ({ text: el})),
-      comment:
-        'Add example here',
+      answers: question.answers.map(el => ({
+        text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
+      })),
+      comment: meta.content,
     },
   };
 };

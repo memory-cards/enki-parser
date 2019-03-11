@@ -13,10 +13,22 @@ const getMeta = (fileContent, fileName) => {
   const yamlObj = yaml.parse(yamlContent);
 
   if (fileName && fileName.includes('curriculum')) {
-    yamlObj.source = 'https://github.com/enkidevs/curriculum/blob/master' + fileName.split('curriculum').pop();
+    yamlObj.source =
+      'https://github.com/enkidevs/curriculum/blob/master' +
+      fileName.split('curriculum').pop();
   }
+  yamlObj.content = getContent(fileContent);
 
   return yamlObj;
+};
+
+const getContent = str => {
+  const content = (
+    str.split(PARTS_DELIMITER).find(el => el.includes('## Content')) || ''
+  )
+    .replace('## Content', '')
+    .trim();
+  return md2Html.processSync(content) + '';
 };
 
 const getQuestionData = str => {
@@ -24,6 +36,7 @@ const getQuestionData = str => {
   const title = titleMatch ? titleMatch[1] : 'item';
   str = str.replace(titleMatch ? titleMatch[0] : '', '');
 
+  const content = str.match(/## Content(.+)---/g);
   const answersMatches = str.match(/\* (.+)/g) || [];
   const answers = answersMatches.map(el => el.replace(/^\* /, ''));
   answersMatches.forEach(el => (str = str.replace(el, '')));
@@ -51,5 +64,5 @@ const getQuestions = str => {
 module.exports = {
   getQuestions,
   getMeta,
-  getQuestionData
-}
+  getQuestionData,
+};
