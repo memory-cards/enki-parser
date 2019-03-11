@@ -8,7 +8,7 @@ const getInfoCardContent = ({ meta, question }) => {
     },
     type: 'info',
     lang: 'en',
-    tags: ['enki', ...meta.tags],
+    tags: ['enki', meta.category, ...(meta.tags || [])],
     card: {
       question: question.html,
       comment: meta.content,
@@ -24,7 +24,7 @@ const getChooseOptionsCardContent = ({ meta, question }) => {
     },
     type: 'choose_options',
     lang: 'en',
-    tags: ['enki', ...meta.tags],
+    tags: ['enki', meta.category, ...(meta.tags || [])],
     card: {
       question: question.html,
       answers: question.answers.map((el, index) => ({
@@ -44,7 +44,7 @@ const getChooseSequenceCardContent = ({ meta, question }) => {
     },
     type: 'choose_sequence',
     lang: 'en',
-    tags: ['enki', ...meta.tags],
+    tags: ['enki', meta.category, ...(meta.tags || [])],
     card: {
       question: question.html,
       answers: question.answers.map(el => ({

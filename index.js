@@ -1,27 +1,35 @@
 const fsExtra = require('fs-extra');
+const glob = require('glob');
 const { getMeta, getQuestions } = require('./util/enkiCardHelpers');
-
 const { getQuestionType } = require('./util/cardTypesHelpers');
 
+const filesToProcess = glob.sync('./input/**/*.md', {
+  ignore: 'README'
+});
+
 const TEST_CARD_NAME = './input/curriculum/javascript/core/arrays/arrays.md';
+const stats = {};
 
 function processCardFile(fileName = TEST_CARD_NAME) {
-  // let outPutFileName = fileName.replace('input/', 'output/').replace('.md', '.html');
-  let fileContent = fsExtra.readFileSync(fileName).toString();
-  let meta = getMeta(fileContent, fileName);
-  let questions = getQuestions(fileContent);
+  try {
+    let fileContent = fsExtra.readFileSync(fileName).toString();
+    let meta = getMeta(fileContent, fileName);
+    let questions = getQuestions(fileContent);
 
-  console.log('meta', JSON.stringify(meta));
-  console.log('questions', questions);
-
-  questions.forEach(question => {
-    const options = { question, meta };
-    const cardType = getQuestionType(options);
-    const cardContent = cardType(options);
-    console.log(JSON.stringify(cardContent, null, 2));
-  });
-
-  return 'result will be here';
+    questions.forEach((question, index) => {
+      const options = { question, meta };
+      const cardType = getQuestionType(options);
+      const cardContent = cardType(options);
+      stats[cardContent.type] = stats[cardContent.type] || 0;
+      stats[cardContent.type]++;
+      let outPutFileName = fileName.replace('input/', 'output/').replace('.md', `-${index.json5}`);
+      fsExtra.outputFileSync(outPutFileName,JSON.stringify(cardContent, null, 2));
+    });
+  } catch(e) {
+    console.error(`Error on processing ${fileName}`);
+  }
 }
 
-processCardFile();
+filesToProcess.forEach(processCardFile);
+
+console.log(JSON.stringify(stats));
