@@ -7,10 +7,15 @@ const md2Html = remark().use(remarkHtml);
 
 // I'm going to add __meta__ into question JSON
 // to put information about source / author
-const getMeta = str => {
-  let strParts = str.split(PARTS_DELIMITER);
+const getMeta = (fileContent, fileName) => {
+  let strParts = fileContent.split(PARTS_DELIMITER);
   const yamlContent = strParts[1].trim();
   const yamlObj = yaml.parse(yamlContent);
+
+  if (fileName && fileName.includes('curriculum')) {
+    yamlObj.source = 'https://github.com/enkidevs/curriculum/blob/master' + fileName.split('curriculum').pop();
+  }
+
   return yamlObj;
 };
 
