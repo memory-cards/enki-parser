@@ -1,9 +1,12 @@
 const ANSWER_PLACEHOLDER = '???';
 
-// Some cards like 
+// Some cards like
 // https://github.com/enkidevs/curriculum/blob/master/javascript/browser-apis/navigation/warn-user-if-back-button-is-pressed.md
 // contain duplicated answers - it fails validation from card-types definition
-const getUniqAnswers = answers => answers.filter((el, index) => index === answers.indexOf(el) );
+const getUniqAnswers = answers =>
+  answers
+    .filter((el, index) => index === answers.indexOf(el))
+    .map(el => el.replace(/`(.+)`/, '$1'));
 
 const getInfoCardContent = ({ meta, question }) => {
   return {
