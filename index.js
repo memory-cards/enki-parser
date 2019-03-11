@@ -4,7 +4,7 @@ const { getMeta, getQuestions } = require('./util/enkiCardHelpers');
 const { getQuestionType } = require('./util/cardTypesHelpers');
 
 const filesToProcess = glob.sync('./input/**/*.md', {
-  ignore: 'README'
+  ignore: './input/**/README.md'
 });
 
 const TEST_CARD_NAME = './input/curriculum/javascript/core/arrays/arrays.md';
@@ -22,11 +22,11 @@ function processCardFile(fileName = TEST_CARD_NAME) {
       const cardContent = cardType(options);
       stats[cardContent.type] = stats[cardContent.type] || 0;
       stats[cardContent.type]++;
-      let outPutFileName = fileName.replace('input/', 'output/').replace('.md', `-${index.json5}`);
+      let outPutFileName = fileName.replace('input/', 'output/').replace('.md', `-${index}.json5`);
       fsExtra.outputFileSync(outPutFileName,JSON.stringify(cardContent, null, 2));
     });
   } catch(e) {
-    console.error(`Error on processing ${fileName}`);
+    console.error(`Error on processing ${fileName}`, e.message);
   }
 }
 

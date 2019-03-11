@@ -1,5 +1,10 @@
 const ANSWER_PLACEHOLDER = '???';
 
+// Some cards like 
+// https://github.com/enkidevs/curriculum/blob/master/javascript/browser-apis/navigation/warn-user-if-back-button-is-pressed.md
+// contain duplicated answers - it fails validation from card-types definition
+const getUniqAnswers = answers => answers.filter((el, index) => index === answers.indexOf(el) );
+
 const getInfoCardContent = ({ meta, question }) => {
   return {
     __meta__: {
@@ -27,7 +32,7 @@ const getChooseOptionsCardContent = ({ meta, question }) => {
     tags: ['enki', meta.category, ...(meta.tags || [])],
     card: {
       question: question.html,
-      answers: question.answers.map((el, index) => ({
+      answers: getUniqAnswers(question.answers).map((el, index) => ({
         text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
         correct: !index,
       })),
@@ -47,7 +52,7 @@ const getChooseSequenceCardContent = ({ meta, question }) => {
     tags: ['enki', meta.category, ...(meta.tags || [])],
     card: {
       question: question.html,
-      answers: question.answers.map(el => ({
+      answers: getUniqAnswers(question.answers).map(el => ({
         text: el.replace(/`(.+?)`/g, '<code>$1</code>'),
       })),
       comment: meta.content,
