@@ -67,7 +67,7 @@ const getQuestionType = ({ question }) => {
     return getInfoCardContent;
   }
   if (numberOfAnswers === 1) {
-    return getChooseOptionsCardContent;
+    return getChooseSequenceCardContent;
   }
   return getChooseSequenceCardContent;
 };
